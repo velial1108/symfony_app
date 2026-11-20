@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: PostRepository::class)]
 class Post
@@ -16,18 +17,25 @@ class Post
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Assert\NotBlank(allowNull: null, normalizer: 'trim')]
+    #[Assert\Length(min: 1, max: 255, minMessage: 'Название поста должно быть длиннее')]
     #[ORM\Column(length: 255)]
     private ?string $title = null;
 
+    #[Assert\NotBlank(allowNull: true, normalizer: 'trim')]
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $description = null;
 
+    #[Assert\NotBlank(allowNull: null, normalizer: 'trim')]
     #[ORM\Column(type: Types::TEXT)]
     private ?string $content = null;
 
+    #[Assert\Type(\DateTimeImmutable::class)]
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $publishedAt = null;
 
+    #[Assert\NotNull]
+    #[Assert\Type(type: 'integer')]
     #[ORM\Column(type: Types::SMALLINT)]
     private ?int $status = null;
 
@@ -143,6 +151,36 @@ class Post
     public function removeTag(Tag $tag): static
     {
         $this->tags->removeElement($tag);
+
+        return $this;
+    }
+    public function toggle(Tag $tag): static {
+
+        $this->tags->contains($tag) ? $this->removeTag($tag) : $this->addTag($tag);
+
+        return $this;
+    }
+    public function syncTags(array $newTags): static
+    {
+        // 1. Удаляем теги, которых нет в новом списке
+        foreach ($this->tags as $existingTag) {
+            if (!in_array($existingTag, $newTags, true)) {
+                $this->removeTag($existingTag);
+            }
+        }
+
+        // 2. Добавляем новые теги (метод addTag в Doctrine сам проверит на дубликаты)
+        foreach ($newTags as $newTag) {
+            $this->addTag($newTag);
+        }
+
+        return $this;
+    }
+    public function syncTagsWithoutDetaching(array $newTags): static
+    {
+        foreach ($newTags as $newTag) {
+            $this->addTag($newTag);
+        }
 
         return $this;
     }
