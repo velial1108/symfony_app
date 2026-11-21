@@ -5,6 +5,9 @@ namespace App\Command;
 use App\Entity\Category;
 use App\Entity\Post;
 use App\Entity\Tag;
+use App\Factory\PostFactory;
+use App\Resource\PostResource;
+use App\ResponseBuilder\PostResponseBuilder;
 use App\Service\PostService;
 use App\Validator\PostValidator;
 use Doctrine\ORM\EntityManagerInterface;
@@ -26,6 +29,8 @@ class GoCommand{
         private EntityManagerInterface $entityManager,
         private PostService $postService,
         private PostValidator $postValidator,
+        private PostResponseBuilder $postResponseBuilder,
+        private PostFactory $postFactory,
     ){
 
     }
@@ -43,27 +48,23 @@ class GoCommand{
 
 
         $data = [
-            'title'=> '',
+            'title'=> 'blablabla',
             'description'=> 'blablabla',
             'content'=> 'blablabla',
             'published_at'=> '2026-11-18',
             'status'=> 2,
             'category_id'=> 1,
         ];
-        $category = $this->entityManager->getReference(Category::class, $data['category_id']);
-        $post = new Post();
-        $post->setTitle($data['title']);
-        $post->setDescription($data['description']);
-        $post->setContent($data['content']);
-        $post->setPublishedAt(new \DateTimeImmutable($data['published_at']));
-        $post->setStatus($data['status']);
-        $post->setCategory($category);
+        //Factory для создания
+        $post = $this->postFactory->makePost($data);
+
         // в шаблон класса поместили новые данные и потом сверяем с валидатором
         $this->postValidator->validate($post);
 
 
         $post = $this->postService->store($post);
-        dd($post);
+        $res = $this->postResponseBuilder->storePostResponse($post);
+        dd($res);
 
         return Command::SUCCESS;
     }
