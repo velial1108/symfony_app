@@ -35,6 +35,7 @@ class GoCommand{
 
     }
 
+
     /**
      * @throws \DateMalformedStringException
      * @throws ORMException
@@ -55,14 +56,19 @@ class GoCommand{
             'status'=> 2,
             'category_id'=> 1,
         ];
+
+        //Пример грамматного request
         //Factory для создания
-        $post = $this->postFactory->makePost($data);
-
+        $storePostInputDTO = $this->postFactory->makeStorePostInputDTO($data);
         // в шаблон класса поместили новые данные и потом сверяем с валидатором
-        $this->postValidator->validate($post);
+        $this->postValidator->validate($storePostInputDTO);
+//      ---------------------------------------------------------------
+///   Тут идет бизнес логика
+        $post = $this->postService->store($storePostInputDTO);
 
 
-        $post = $this->postService->store($post);
+
+        //Пример правильного output dto
         $res = $this->postResponseBuilder->storePostResponse($post);
         dd($res);
 

@@ -3,9 +3,8 @@
 namespace App\Validator;
 
 
-use App\Entity\Post;
+use App\DTO\Input\Post\StorePostInputDTO;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
-
 
 
 class PostValidator
@@ -14,7 +13,7 @@ class PostValidator
     {
 
     }
-    public function validate(Post $post):void
+    public function validate(StorePostInputDTO $post):void
     {
         $errors = $this->validator->validate($post);
         if (count($errors) > 0) {
