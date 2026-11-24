@@ -25,4 +25,10 @@ class PostResponseBuilder
         $postResource = $this->postResource->postItem($PosOutputDTO);
         return new JsonResponse($postResource, $status, $headers);
     }
+    public function indexPostResponse(array $posts, $status = 200, $headers = [], ): JsonResponse
+    {
+        $PosOutputDTOCollection = $this->postFactory->makePostOutputDTOCollection($posts);
+        $postResource = $this->postResource->postCollection($PosOutputDTOCollection);
+        return new JsonResponse($postResource, $status, $headers);
+    }
 }

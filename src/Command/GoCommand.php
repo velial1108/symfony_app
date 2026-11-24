@@ -9,7 +9,7 @@ use App\Factory\PostFactory;
 use App\Resource\PostResource;
 use App\ResponseBuilder\PostResponseBuilder;
 use App\Service\PostService;
-use App\Validator\PostValidator;
+use App\DTOValidator\PostValidator;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Exception\ORMException;
 use Symfony\Component\Console\Attribute\Argument;
@@ -54,7 +54,7 @@ class GoCommand{
             'content'=> 'blablabla',
             'published_at'=> '2026-11-18',
             'status'=> 2,
-            'category_id'=> 1,
+            'category_id'=> 156,
         ];
 
         //Пример грамматного request
@@ -63,7 +63,7 @@ class GoCommand{
         // в шаблон класса поместили новые данные и потом сверяем с валидатором
         $this->postValidator->validate($storePostInputDTO);
 //      ---------------------------------------------------------------
-///   Тут идет бизнес логика
+///Тут идет бизнес логика
         $post = $this->postService->store($storePostInputDTO);
 
 

@@ -20,6 +20,9 @@ class PostResource
         return $this->serializer->normalize($dto, 'json', ['groups' => ['post:item']]);
 
     }
-
+    public function postCollection(array $posts):array
+    {
+        return $this->serializer->normalize($posts, 'json', ['groups' => ['post:item']]);
+    }
 
 }

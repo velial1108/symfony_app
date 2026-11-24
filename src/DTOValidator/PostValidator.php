@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Validator;
+namespace App\DTOValidator;
 
 
 use App\DTO\Input\Post\StorePostInputDTO;

@@ -2,6 +2,8 @@
 
 namespace App\DTO\Input\Post;
 
+use App\Entity\Category;
+use App\Validator\Constraint\EntityExists;
 use Symfony\Component\Validator\Constraints as Assert;
 class StorePostInputDTO
 {
@@ -24,6 +26,8 @@ class StorePostInputDTO
     public ?int $status = null;
 
     #[Assert\NotNull]
+    //Создаем свое правило валидации входных параметров
+    #[EntityExists(entity: Category::class)]
     public ?int $categoryId = null;
     public function storePostDTO(array $data)
     {

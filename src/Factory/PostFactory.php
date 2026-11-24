@@ -68,4 +68,8 @@ class PostFactory
         );
         return $postOutputDTO;
     }
+    public function makePostOutputDTOCollection(array $posts): array
+    {
+        return array_map(fn ($post) => $this->makePostOutputDTO($post), $posts);
+    }
 }
