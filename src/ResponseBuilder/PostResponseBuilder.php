@@ -31,4 +31,24 @@ class PostResponseBuilder
         $postResource = $this->postResource->postCollection($PosOutputDTOCollection);
         return new JsonResponse($postResource, $status, $headers);
     }
+
+    public function showPostResponse(Post $post, $status = 200, $headers = [], ): JsonResponse
+    {
+        $postOutputDTO = $this->postFactory->makePostOutputDTO($post);
+        $postResource = $this->postResource->postItem($postOutputDTO);
+        return new JsonResponse($postResource, $status, $headers);
+    }
+    public function updatePostResponse(Post $post, $status = 200, $headers = []): JsonResponse
+    {
+        $postOutputDTO = $this->postFactory->makePostOutputDTO($post);
+        $postResource = $this->postResource->postItem($postOutputDTO);
+        return new JsonResponse($postResource, $status, $headers);
+    }
+
+    public function destroyPostResponse($status = 200, $headers = []): JsonResponse
+    {
+        return new JsonResponse(['message' => 'success delete'], $status, $headers);
+    }
+
+
 }

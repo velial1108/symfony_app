@@ -9,7 +9,7 @@ use App\Factory\PostFactory;
 use App\Resource\PostResource;
 use App\ResponseBuilder\PostResponseBuilder;
 use App\Service\PostService;
-use App\DTOValidator\PostValidator;
+use App\DTOValidator\PostDTOValidator;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Exception\ORMException;
 use Symfony\Component\Console\Attribute\Argument;
@@ -27,10 +27,10 @@ class GoCommand{
 //все изменения с таблицами делаются через entityManage
     public function __construct(
         private EntityManagerInterface $entityManager,
-        private PostService $postService,
-        private PostValidator $postValidator,
-        private PostResponseBuilder $postResponseBuilder,
-        private PostFactory $postFactory,
+        private PostService            $postService,
+        private PostDTOValidator       $postValidator,
+        private PostResponseBuilder    $postResponseBuilder,
+        private PostFactory            $postFactory,
     ){
 
     }
